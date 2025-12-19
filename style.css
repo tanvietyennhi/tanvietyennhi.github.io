@@ -776,11 +776,98 @@ body {
     text-align: center;
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
 .gift-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.gift-click-hint {
+    font-size: 1rem;
+    color: var(--primary-color);
+    margin: 20px 0;
+    padding: 15px;
+    background: var(--secondary-color);
+    border-radius: 10px;
+    font-weight: 600;
+    animation: pulse-hint 2s ease-in-out infinite;
+    transition: opacity 0.3s ease;
+}
+
+.gift-item.opened .gift-click-hint {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes pulse-hint {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.gift-qr-hidden {
+    max-height: 0;
+    opacity: 0;
+    transform: scale(0.8);
+    overflow: hidden;
+    transition: all 0.5s ease;
+    margin: 0;
+    padding: 0 20px;
+}
+
+.gift-item.opened .gift-qr-hidden {
+    max-height: 500px;
+    opacity: 1;
+    transform: scale(1);
+    margin: 0 auto 20px;
+    padding: 20px;
+    animation: revealQR 0.5s ease forwards;
+}
+
+.gift-bank-hidden {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    overflow: hidden;
+    transition: all 0.5s ease;
+    margin: 0;
+    padding: 0;
+}
+
+.gift-item.opened .gift-bank-hidden {
+    max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 15px;
+    padding: 0;
+    animation: revealBank 0.5s ease 0.2s forwards;
+}
+
+@keyframes revealQR {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes revealBank {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .gift-ribbon {
@@ -805,10 +892,9 @@ body {
 }
 
 .gift-qr-container {
-    margin: 0 auto 20px;
+    margin: 0 auto;
     max-width: 280px;
     background: #f9f9f9;
-    padding: 20px;
     border-radius: 15px;
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
 }

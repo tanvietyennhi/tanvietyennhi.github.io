@@ -242,3 +242,13 @@ for (let i = 0; i < 10; i++) {
     setTimeout(() => createFlower(), i * 200);
 }
 
+// Gift Box Click Event
+const giftItems = document.querySelectorAll('.gift-item');
+
+giftItems.forEach(item => {
+    item.addEventListener('click', () => {
+        // Toggle opened class
+        item.classList.toggle('opened');
+    });
+});
+
