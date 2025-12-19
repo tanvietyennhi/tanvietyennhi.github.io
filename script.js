@@ -117,6 +117,77 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// Wishes Management
+const wishesList = document.getElementById('wishesList');
+
+// Load wishes from localStorage
+function loadWishes() {
+    const wishes = JSON.parse(localStorage.getItem('weddingWishes')) || [];
+    wishesList.innerHTML = '';
+    
+    if (wishes.length === 0) {
+        wishesList.innerHTML = '<p class="no-wishes">Chưa có lời chúc nào. Hãy là người đầu tiên gửi lời chúc mừng nhé! 💕</p>';
+        return;
+    }
+    
+    wishes.reverse().forEach((wish, index) => {
+        addWishToDOM(wish, index === 0);
+    });
+}
+
+// Add wish to DOM
+function addWishToDOM(wish, isNew = false) {
+    const wishItem = document.createElement('div');
+    wishItem.className = `wish-item ${isNew ? 'wish-new' : ''}`;
+    
+    const date = new Date(wish.date);
+    const dateStr = date.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    wishItem.innerHTML = `
+        <div class="wish-header">
+            <div class="wish-author">
+                <span class="wish-icon">💐</span>
+                <strong class="wish-name">${escapeHtml(wish.name)}</strong>
+            </div>
+            <span class="wish-date">${dateStr}</span>
+        </div>
+        <div class="wish-message">${escapeHtml(wish.message)}</div>
+        ${wish.phone ? `<div class="wish-contact">📞 ${escapeHtml(wish.phone)}</div>` : ''}
+    `;
+    
+    wishesList.insertBefore(wishItem, wishesList.firstChild);
+    
+    // Scroll to new wish
+    if (isNew) {
+        setTimeout(() => {
+            wishItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Save wish to localStorage
+function saveWish(wish) {
+    const wishes = JSON.parse(localStorage.getItem('weddingWishes')) || [];
+    wishes.push({
+        ...wish,
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('weddingWishes', JSON.stringify(wishes));
+}
+
 // RSVP Form Handling
 const rsvpForm = document.getElementById('rsvpForm');
 
@@ -124,22 +195,36 @@ rsvpForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        message: document.getElementById('message').value
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        message: document.getElementById('message').value.trim()
     };
 
-    // Here you would typically send the data to a server
-    // For now, we'll just show an alert
-    console.log('Wish Data:', formData);
+    if (!formData.name || !formData.message) {
+        alert('Vui lòng điền đầy đủ tên và lời chúc!');
+        return;
+    }
+
+    // Save to localStorage
+    saveWish(formData);
     
-    alert('Cảm ơn bạn đã gửi lời chúc mừng! Lời chúc của bạn rất ý nghĩa với chúng tôi.\n\n' +
-          'Thông tin của bạn đã được ghi nhận:\n' +
-          `Tên: ${formData.name}\n` +
-          (formData.email ? `Email: ${formData.email}\n` : '') +
-          (formData.phone ? `Số điện thoại: ${formData.phone}\n` : '') +
-          `\nLời chúc: ${formData.message}`);
+    // Add to DOM immediately
+    addWishToDOM({
+        ...formData,
+        date: new Date().toISOString()
+    }, true);
+    
+    // Show success message
+    const submitBtn = rsvpForm.querySelector('.submit-btn');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = '✓ Đã gửi!';
+    submitBtn.style.background = '#4caf50';
+    
+    setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.style.background = '';
+    }, 2000);
     
     // Reset form
     rsvpForm.reset();
@@ -154,13 +239,17 @@ rsvpForm.addEventListener('submit', (e) => {
     // })
     // .then(response => response.json())
     // .then(data => {
-    //     alert('Cảm ơn bạn đã gửi lời chúc mừng!');
+    //     saveWish(formData);
+    //     addWishToDOM({...formData, date: new Date().toISOString()}, true);
     //     rsvpForm.reset();
     // })
     // .catch(error => {
     //     alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
     // });
 });
+
+// Load wishes on page load
+loadWishes();
 
 // Fade in animation on scroll
 const observerOptions = {
