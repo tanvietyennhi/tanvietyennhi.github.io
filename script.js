@@ -194,3 +194,51 @@ window.addEventListener('scroll', () => {
     }
 });
 
+// Audio Player
+const audioToggle = document.getElementById('audioToggle');
+const backgroundMusic = document.getElementById('backgroundMusic');
+let isPlaying = false;
+
+audioToggle.addEventListener('click', () => {
+    if (isPlaying) {
+        backgroundMusic.pause();
+        audioToggle.classList.remove('playing');
+        isPlaying = false;
+    } else {
+        backgroundMusic.play().catch(e => {
+            console.log('Auto-play was prevented:', e);
+        });
+        audioToggle.classList.add('playing');
+        isPlaying = true;
+    }
+});
+
+// Falling Flowers Effect
+function createFlower() {
+    const flower = document.createElement('div');
+    flower.className = 'flower';
+    flower.innerHTML = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐', '🌼'][Math.floor(Math.random() * 7)];
+    
+    const startX = Math.random() * 100;
+    const duration = 3 + Math.random() * 4;
+    const delay = Math.random() * 2;
+    
+    flower.style.left = startX + '%';
+    flower.style.animationDuration = duration + 's';
+    flower.style.animationDelay = delay + 's';
+    
+    document.getElementById('fallingFlowers').appendChild(flower);
+    
+    setTimeout(() => {
+        flower.remove();
+    }, (duration + delay) * 1000);
+}
+
+// Create flowers periodically
+setInterval(createFlower, 300);
+
+// Create initial flowers
+for (let i = 0; i < 10; i++) {
+    setTimeout(() => createFlower(), i * 200);
+}
+

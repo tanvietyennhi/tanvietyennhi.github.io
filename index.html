@@ -10,6 +10,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Audio Player -->
+    <div class="audio-player" id="audioPlayer">
+        <button class="audio-toggle" id="audioToggle">
+            <span class="audio-icon">🎵</span>
+            <span class="audio-text">Nhạc</span>
+        </button>
+        <audio id="backgroundMusic" loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            <!-- Bạn có thể thay thế bằng link nhạc của bạn -->
+        </audio>
+    </div>
+
+    <!-- Falling Flowers -->
+    <div class="falling-flowers" id="fallingFlowers"></div>
+
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-overlay"></div>
@@ -203,16 +218,35 @@
                     </div>
                 </div>
             </div>
-            <div class="map-container">
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1234567890!2d106.6297!3d10.8231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQ5JzIzLjEiTiAxMDbCsDM3JzQ2LjkiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s" 
-                    width="100%" 
-                    height="400" 
-                    style="border:0;" 
-                    allowfullscreen="" 
-                    loading="lazy" 
-                    referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
+            <div class="maps-container">
+                <div class="map-item">
+                    <h3 class="map-title">Nhà Hàng Tiệc Cưới Ngọc Lan</h3>
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1234567890!2d108.2000!3d13.9500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDU3JzAwLjAiTiAxMDjCsDEyJzAwLjAiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s" 
+                            width="100%" 
+                            height="300" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+                <div class="map-item">
+                    <h3 class="map-title">Nhà Hàng Thiên Hương</h3>
+                    <div class="map-container">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1234567890!2d109.1500!3d13.8500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDUxJzAwLjAiTiAxMDlCsDA5JzAwLjAiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s" 
+                            width="100%" 
+                            height="300" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
