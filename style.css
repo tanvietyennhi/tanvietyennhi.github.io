@@ -66,6 +66,92 @@ body {
     font-size: 0.9rem;
 }
 
+.audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.audio-btn {
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.audio-btn:hover {
+    background: var(--gold);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.audio-btn:active {
+    transform: scale(0.95);
+}
+
+.audio-toggle {
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.audio-toggle:hover {
+    background: var(--gold);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.audio-toggle.playing {
+    background: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.audio-icon {
+    font-size: 1.3rem;
+}
+
+.audio-text {
+    font-size: 0.85rem;
+}
+
+.audio-info {
+    width: 100%;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.audio-title {
+    font-size: 0.75rem;
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 180px;
+    margin: 0 auto;
+}
+
 @keyframes pulse {
     0%, 100% {
         transform: scale(1);
@@ -1147,6 +1233,20 @@ body {
         padding: 30px 20px;
     }
 
+    .audio-player {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .audio-toggle {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+
+    .audio-icon {
+        font-size: 1.2rem;
+    }
+
     .gift-box-container {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -1247,5 +1347,229 @@ body {
     .map-container iframe {
         height: 250px;
     }
+}
+
+/* Wishes Section */
+.wishes-container {
+    max-width: 800px;
+    margin: 50px auto 0;
+    background: var(--white);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.wishes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.wishes-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.wishes-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.toggle-wishes-btn,
+.clear-wishes-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.toggle-wishes-btn {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.toggle-wishes-btn:hover {
+    background: var(--gold);
+    transform: translateY(-2px);
+}
+
+.toggle-wishes-btn:active {
+    transform: translateY(0);
+}
+
+.clear-wishes-btn {
+    background: #dc3545;
+    color: var(--white);
+}
+
+.clear-wishes-btn:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+.clear-wishes-btn:active {
+    transform: translateY(0);
+}
+
+.wishes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.wish-item {
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wish-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.wish-item.wish-new {
+    animation: slideIn 0.5s ease;
+    border-left-color: var(--gold);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.wish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wish-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wish-icon {
+    font-size: 1.2rem;
+}
+
+.wish-name {
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.wish-date {
+    color: var(--light-text);
+    font-size: 0.85rem;
+}
+
+.wish-message {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.wish-contact {
+    color: var(--light-text);
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.no-wishes {
+    text-align: center;
+    color: var(--light-text);
+    padding: 40px 20px;
+    font-style: italic;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination-btn {
+    background: var(--white);
+    color: var(--text-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 40px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: var(--primary-color);
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.pagination-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.pagination-btn.active {
+    background: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+    font-weight: 700;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f0f0f0;
+    border-color: #ddd;
+}
+
+.pagination-ellipsis {
+    padding: 8px 4px;
+    color: var(--light-text);
+    font-weight: 600;
+}
+
+.pagination-info {
+    text-align: center;
+    color: var(--light-text);
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
 }
 

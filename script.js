@@ -119,20 +119,138 @@ document.addEventListener('keydown', (e) => {
 
 // Wishes Management
 const wishesList = document.getElementById('wishesList');
+const pagination = document.getElementById('pagination');
+const itemsPerPage = 10;
+let currentPage = 1;
 
-// Load wishes from localStorage
-function loadWishes() {
+// Load wishes from localStorage with pagination
+function loadWishes(page = 1) {
     const wishes = JSON.parse(localStorage.getItem('weddingWishes')) || [];
     wishesList.innerHTML = '';
+    pagination.innerHTML = '';
+    currentPage = page;
     
     if (wishes.length === 0) {
         wishesList.innerHTML = '<p class="no-wishes">Chưa có lời chúc nào. Hãy là người đầu tiên gửi lời chúc mừng nhé! 💕</p>';
         return;
     }
     
-    wishes.reverse().forEach((wish, index) => {
-        addWishToDOM(wish, index === 0);
+    // Reverse to show newest first
+    const reversedWishes = [...wishes].reverse();
+    
+    // Calculate pagination
+    const totalPages = Math.ceil(reversedWishes.length / itemsPerPage);
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageWishes = reversedWishes.slice(startIndex, endIndex);
+    
+    // Display wishes for current page
+    pageWishes.forEach((wish, index) => {
+        addWishToDOM(wish, false);
     });
+    
+    // Create pagination buttons
+    if (totalPages > 1) {
+        createPagination(totalPages, page);
+    }
+}
+
+// Create pagination buttons
+function createPagination(totalPages, currentPage) {
+    pagination.innerHTML = '';
+    
+    const paginationContainer = document.createElement('div');
+    paginationContainer.className = 'pagination-container';
+    
+    // Previous button
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'pagination-btn';
+    prevBtn.textContent = '← Trước';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            loadWishes(currentPage - 1);
+            window.scrollTo({ top: wishesList.offsetTop - 100, behavior: 'smooth' });
+        }
+    });
+    paginationContainer.appendChild(prevBtn);
+    
+    // Page numbers
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage < maxVisiblePages - 1) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    if (startPage > 1) {
+        const firstBtn = document.createElement('button');
+        firstBtn.className = 'pagination-btn';
+        firstBtn.textContent = '1';
+        firstBtn.addEventListener('click', () => {
+            loadWishes(1);
+            window.scrollTo({ top: wishesList.offsetTop - 100, behavior: 'smooth' });
+        });
+        paginationContainer.appendChild(firstBtn);
+        
+        if (startPage > 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'pagination-ellipsis';
+            ellipsis.textContent = '...';
+            paginationContainer.appendChild(ellipsis);
+        }
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.addEventListener('click', () => {
+            loadWishes(i);
+            window.scrollTo({ top: wishesList.offsetTop - 100, behavior: 'smooth' });
+        });
+        paginationContainer.appendChild(pageBtn);
+    }
+    
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'pagination-ellipsis';
+            ellipsis.textContent = '...';
+            paginationContainer.appendChild(ellipsis);
+        }
+        
+        const lastBtn = document.createElement('button');
+        lastBtn.className = 'pagination-btn';
+        lastBtn.textContent = totalPages;
+        lastBtn.addEventListener('click', () => {
+            loadWishes(totalPages);
+            window.scrollTo({ top: wishesList.offsetTop - 100, behavior: 'smooth' });
+        });
+        paginationContainer.appendChild(lastBtn);
+    }
+    
+    // Next button
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'pagination-btn';
+    nextBtn.textContent = 'Sau →';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            loadWishes(currentPage + 1);
+            window.scrollTo({ top: wishesList.offsetTop - 100, behavior: 'smooth' });
+        }
+    });
+    paginationContainer.appendChild(nextBtn);
+    
+    pagination.appendChild(paginationContainer);
+    
+    // Page info
+    const pageInfo = document.createElement('div');
+    pageInfo.className = 'pagination-info';
+    pageInfo.textContent = `Trang ${currentPage} / ${totalPages} (${reversedWishes.length} lời chúc)`;
+    pagination.appendChild(pageInfo);
 }
 
 // Add wish to DOM
@@ -158,17 +276,9 @@ function addWishToDOM(wish, isNew = false) {
             <span class="wish-date">${dateStr}</span>
         </div>
         <div class="wish-message">${escapeHtml(wish.message)}</div>
-        ${wish.phone ? `<div class="wish-contact">📞 ${escapeHtml(wish.phone)}</div>` : ''}
     `;
     
-    wishesList.insertBefore(wishItem, wishesList.firstChild);
-    
-    // Scroll to new wish
-    if (isNew) {
-        setTimeout(() => {
-            wishItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-    }
+    wishesList.appendChild(wishItem);
 }
 
 // Escape HTML to prevent XSS
@@ -196,8 +306,6 @@ rsvpForm.addEventListener('submit', (e) => {
     
     const formData = {
         name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
         message: document.getElementById('message').value.trim()
     };
 
@@ -209,11 +317,13 @@ rsvpForm.addEventListener('submit', (e) => {
     // Save to localStorage
     saveWish(formData);
     
-    // Add to DOM immediately
-    addWishToDOM({
-        ...formData,
-        date: new Date().toISOString()
-    }, true);
+    // Reload wishes to show new wish on first page
+    loadWishes(1);
+    
+    // Scroll to wishes section
+    setTimeout(() => {
+        document.getElementById('wishesList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
     
     // Show success message
     const submitBtn = rsvpForm.querySelector('.submit-btn');
@@ -247,6 +357,32 @@ rsvpForm.addEventListener('submit', (e) => {
     //     alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
     // });
 });
+
+// Clear all wishes
+function clearAllWishes() {
+    if (confirm('Bạn có chắc chắn muốn xóa tất cả lời chúc cũ không?')) {
+        localStorage.removeItem('weddingWishes');
+        loadWishes(1);
+    }
+}
+
+// Toggle wishes visibility
+function toggleWishes() {
+    const wishesList = document.getElementById('wishesList');
+    const toggleBtn = document.getElementById('toggleWishesBtn');
+    
+    if (wishesList.style.display === 'none') {
+        wishesList.style.display = 'flex';
+        toggleBtn.textContent = 'Ẩn Lời Chúc';
+    } else {
+        wishesList.style.display = 'none';
+        toggleBtn.textContent = 'Hiện Lời Chúc';
+    }
+}
+
+// Make functions globally accessible
+window.clearAllWishes = clearAllWishes;
+window.toggleWishes = toggleWishes;
 
 // Load wishes on page load
 loadWishes();
@@ -287,7 +423,9 @@ window.addEventListener('scroll', () => {
 const audioToggle = document.getElementById('audioToggle');
 const backgroundMusic = document.getElementById('backgroundMusic');
 let isPlaying = false;
+let hasStartedPlaying = false;
 
+// Play/Pause toggle
 audioToggle.addEventListener('click', () => {
     if (isPlaying) {
         backgroundMusic.pause();
@@ -295,12 +433,70 @@ audioToggle.addEventListener('click', () => {
         isPlaying = false;
     } else {
         backgroundMusic.play().catch(e => {
-            console.log('Auto-play was prevented:', e);
+            console.log('Play was prevented:', e);
         });
         audioToggle.classList.add('playing');
         isPlaying = true;
     }
 });
+
+// Function to try auto play
+function tryAutoPlay() {
+    if (hasStartedPlaying || isPlaying) return;
+    
+    const playPromise = backgroundMusic.play();
+    
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                // Autoplay started successfully
+                isPlaying = true;
+                hasStartedPlaying = true;
+                audioToggle.classList.add('playing');
+                console.log('Nhạc đã tự động phát');
+            })
+            .catch(error => {
+                // Autoplay was prevented - will try again on user interaction
+                console.log('Tự động phát nhạc bị chặn, sẽ thử lại khi có tương tác...');
+            });
+    }
+}
+
+// Try to play immediately when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(tryAutoPlay, 100);
+    });
+} else {
+    setTimeout(tryAutoPlay, 100);
+}
+
+// Try when page is fully loaded
+window.addEventListener('load', () => {
+    setTimeout(tryAutoPlay, 300);
+});
+
+// Try on any user interaction (click, touch, scroll, mouse move, key press)
+const interactionEvents = ['click', 'touchstart', 'scroll', 'mousemove', 'keydown', 'touchmove'];
+interactionEvents.forEach(eventType => {
+    document.addEventListener(eventType, () => {
+        if (!hasStartedPlaying && !isPlaying) {
+            tryAutoPlay();
+        }
+    }, { once: true, passive: true });
+});
+
+// Also try periodically (in case page loads in background)
+let retryCount = 0;
+const maxRetries = 5;
+const retryInterval = setInterval(() => {
+    if (!hasStartedPlaying && !isPlaying && retryCount < maxRetries) {
+        retryCount++;
+        tryAutoPlay();
+    } else {
+        clearInterval(retryInterval);
+    }
+}, 1000);
 
 // Falling Flowers Effect
 function createFlower() {

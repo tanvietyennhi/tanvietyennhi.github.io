@@ -16,9 +16,9 @@
             <span class="audio-icon">🎵</span>
             <span class="audio-text">Nhạc</span>
         </button>
-        <audio id="backgroundMusic" loop>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-            <!-- Bạn có thể thay thế bằng link nhạc của bạn -->
+        <audio id="backgroundMusic" autoplay loop>
+            <source src="Đám Cưới Linh Đình.mp3" type="audio/mpeg">
+            Trình duyệt của bạn không hỗ trợ phát nhạc.
         </audio>
     </div>
 
@@ -223,7 +223,7 @@
                     <h3 class="map-title">Nhà Hàng Tiệc Cưới Ngọc Lan</h3>
                     <div class="map-container">
                         <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1234567890!2d108.2000!3d13.9500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDU3JzAwLjAiTiAxMDjCsDEyJzAwLjAiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s" 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1995561.454232292!2d108.04517059999999!3d12.343966499999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x316f3dd61b2678ff%3A0x4e8cb9934ddf9caa!2zTmjDoCBIw6BuZyBUaeG7h2MgQ8aw4bubaSBOZ-G7jWMgTGFu!5e0!3m2!1svi!2s!4v1766131029322!5m2!1svi!2s"
                             width="100%" 
                             height="300" 
                             style="border:0;" 
@@ -237,7 +237,7 @@
                     <h3 class="map-title">Nhà Hàng Thiên Hương</h3>
                     <div class="map-container">
                         <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.1234567890!2d109.1500!3d13.8500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDUxJzAwLjAiTiAxMDlCsDA5JzAwLjAiRQ!5e0!3m2!1svi!2s!4v1234567890123!5m2!1svi!2s" 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3863.8907730525443!2d109.0081421833587!3d14.433457750021255!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3168c55b0374e8a7%3A0xc0d5867b1d060629!2zTmjDoCBIw6BuZyBUaGnDqm4gSMawxqFuZw!5e0!3m2!1svi!2s!4v1766131260501!5m2!1svi!2s" 
                             width="100%" 
                             height="300" 
                             style="border:0;" 
@@ -262,16 +262,27 @@
                     <input type="text" id="name" placeholder="Họ và Tên *" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="email" placeholder="Email (tùy chọn)">
-                </div>
-                <div class="form-group">
-                    <input type="tel" id="phone" placeholder="Số Điện Thoại (tùy chọn)">
-                </div>
-                <div class="form-group">
                     <textarea id="message" placeholder="Lời chúc mừng của bạn *" rows="6" required></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Gửi Lời Chúc</button>
             </form>
+
+            <!-- Wishes Display -->
+            <div class="wishes-container">
+                <div class="wishes-header">
+                    <h3 class="wishes-title">Lời Chúc Mừng</h3>
+                    <div class="wishes-actions">
+                        <button class="toggle-wishes-btn" id="toggleWishesBtn" onclick="toggleWishes()">Ẩn Lời Chúc</button>
+                        <button class="clear-wishes-btn" id="clearWishesBtn" onclick="clearAllWishes()">Xóa Tất Cả</button>
+                    </div>
+                </div>
+                <div class="wishes-list" id="wishesList">
+                    <!-- Wishes will be displayed here -->
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination buttons will be displayed here -->
+                </div>
+            </div>
         </div>
     </section>
 
